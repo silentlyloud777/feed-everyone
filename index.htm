@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feed Everyone — Full of Mercy</title>
+<style>
+body { 
+  font-family: sans-serif; 
+  text-align:center; 
+  padding:2rem; 
+  background:#f0f9f0; 
+  color:#333; 
+}
+h1 { color:#4caf50; }
+button { 
+  padding:1rem 2rem; 
+  font-size:1.2rem; 
+  margin:1rem; 
+  cursor:pointer; 
+  background:#4caf50; 
+  color:white; 
+  border:none; 
+  border-radius:8px; 
+  transition: transform 0.1s ease; 
+}
+button:active { transform: scale(0.95); }
+.modal {
+  display:none;
+  position: fixed;
+  top:50%; left:50%;
+  transform: translate(-50%, -50%);
+  background:white;
+  padding:2rem;
+  border-radius:12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+.modal.show { display:block; }
+</style>
+</head>
+<body>
+
+<h1>Full of Mercy — Feed Everyone</h1>
+<p>Click the button to perform an act of kindness 🌍💚</p>
+
+<button id="kindBtn">Do a Kind Act</button>
+
+<p>Acts done: <span id="acts">0</span></p>
+<p>People fed: <span id="credits">0</span></p>
+
+<div id="modal" class="modal">
+  <p>Alhamdulilah! You helped feed someone 💚</p>
+  <button id="closeModal">Close</button>
+</div>
+
+<script>
+let state = { acts:0, credits:0 };
+const kindBtn = document.getElementById('kindBtn');
+const actsDisplay = document.getElementById('acts');
+const creditsDisplay = document.getElementById('credits');
+const modal = document.getElementById('modal');
+const closeModal = document.getElementById('closeModal');
+
+function render(){
+  actsDisplay.textContent = state.acts;
+  creditsDisplay.textContent = state.credits;
+}
+
+function showModal(){
+  modal.classList.add('show');
+}
+
+closeModal.addEventListener('click', () => {
+  modal.classList.remove('show');
+});
+
+kindBtn.addEventListener('click', () => {
+  if(!state) return; // iPhone safety
+  state.acts++;
+  if(state.acts >= 3){
+    state.acts = 0;
+    state.credits++;
+    setTimeout(showModal, 300);
+  }
+  render();
+});
+
+render();
+</script>
+
+</body>
+</html>
