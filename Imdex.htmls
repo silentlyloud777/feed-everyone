@@ -75,7 +75,6 @@ closeModal.addEventListener('click', () => {
 });
 
 kindBtn.addEventListener('click', () => {
-  if(!state) return; // iPhone safety
   state.acts++;
   if(state.acts >= 3){
     state.acts = 0;
