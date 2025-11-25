@@ -1,143 +1,157 @@
-# Your New Website 🤩
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full of Mercy — For the People, By the People</title>
+<style>
+:root{--primary:#708238;--bg:#f7f7f5;--card:#fff;--muted:#555;}
+body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:#111;}
+.wrap{max-width:820px;margin:28px auto;padding:20px;}
+h1{margin:0;font-size:1.8rem;color:var(--primary);}
+p.lead{margin:6px 0 18px;color:var(--muted);}
+.card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(10,10,10,0.06);}
+.big-btn{display:block;margin:18px auto;padding:28px 26px;border-radius:16px;background:var(--primary);color:white;font-size:20px;border:0;cursor:pointer;box-shadow:0 8px 24px rgba(112,130,56,0.18);}
+.counter{text-align:center;margin-top:12px;color:var(--primary);font-weight:700;}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.btn{padding:10px;border-radius:10px;border:1px solid #eee;background:#fafafa;cursor:pointer;}
+.search{width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;margin-bottom:8px;}
+.list{max-height:260px;overflow:auto;border:1px solid #eee;padding:8px;border-radius:8px;background:#fff;}
+.country{padding:8px;border-bottom:1px dashed #f0f0f0;cursor:pointer;}
+.country:last-child{border-bottom:0;}
+footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px;}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);z-index:40;}
+.modal .box{width:92%;max-width:760px;background:white;border-radius:12px;padding:16px;}
+.tabs{display:flex;gap:8px;margin-bottom:8px;}
+.tab{padding:8px;border-radius:8px;border:1px solid #eee;cursor:pointer;background:#fafafa;}
+.profiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.profile{padding:10px;border-radius:8px;border:1px solid #f1f1f1;}
+.map-info{font-size:13px;color:var(--muted);margin-top:8px;}
+small.help{color:#666;display:block;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Full of Mercy</h1>
+<p class="lead">For the People, By the People. Tap for Kindness — every 3 acts = 1 meal credit.</p>
 
-Oh hi! Welcome to your new website. 🛼
+<div class="card">
+<button id="kindBtn" class="big-btn">Tap for Kindness 💚</button>
+<div class="counter" id="counterText">0 / 3 acts</div>
 
-With this project you can make a website and preview it in your browser, then deploy it for free – you don't even need a host!
+<div class="choices">
+  <div>
+    <div style="font-weight:700;margin-bottom:8px">Credits</div>
+    <div id="credits" style="font-size:20px;color:var(--primary)">0</div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-weight:700;margin-bottom:8px">Actions</div>
+    <button id="openModal" class="btn">Redeem Credit</button>
+    <small class="help">Click redeem when you have credits.</small>
+  </div>
+</div>
 
-**In this guide we'll learn how to deploy your project to <a href="https://www.fastly.com/products/edge-compute" target="_blank">Fastly Compute</a> – your deployment will automatically handle things like 404 errors, and your beautiful website will immediately be available for everyone, everywhere all at once. 🪄**
+<hr style="margin:14px 0;border:none;border-top:1px solid #f0f0f0" />
 
-> You can alternatively deploy your blog to other platforms, like <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+  <button id="demoGive" class="btn">Demo: Give 1 Credit</button>
+  <button id="reset" class="btn">Reset Demo</button>
+</div>
+</div>
 
-## In this doc
+<footer>
+<small>Made with ♥ — For the People, By the People</small>
+</footer>
+</div>
 
-* [Fork your own site](#fork-your-own-site)
-* [Get to know your website](#get-to-know-your-website)
-  * [Share your draft site](#share-your-draft-site)
-* [Deploy your site to Fastly Compute](#deploy-your-site-to-fastly-compute)
-* [Save your edits to GitHub](#save-your-edits-to-github)
-* [How this project works](#how-this-project-works-)
-  * [Extensions](#extensions)
-* [Keep going! 🚀](#keep-going-)
+<!-- Modal -->
+<div id="redeemModal" class="modal">
+<div class="box">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<h3 style="margin:0">Redeem Food Credit</h3>
+<button id="closeModal" class="btn">Close</button>
+</div>
 
-## Fork your own site
+<div class="tabs" style="margin-top:12px">
+  <div id="tabList" class="tab" style="background:#fff;border:2px solid var(--primary);color:var(--primary)">Country List</div>
+  <div id="tabMap" class="tab">Map (click)</div>
+</div>
 
-**Fork** [this repository](https://github.com/glitchdotcom/website-to-compute/) to create your own copy of the site.
+<div id="panelList">
+<input id="search" class="search" placeholder="Search country"/>
+<div class="list" id="countryList"></div>
+</div>
 
-In your fork, open the site in a codespace by clicking **Code** > **Codespaces** and creating a new codespace on your main branch. 
+<div id="panelMap" style="display:none">
+<p class="map-info">Open the world map externally, paste country below.</p>
+<div style="display:flex;gap:8px;align-items:center">
+  <button id="openWorldMap" class="btn">Open World Map</button>
+  <input id="mapCountry" class="search" placeholder="Paste country"/>
+  <button id="mapChoose" class="btn">Choose</button>
+</div>
+</div>
 
-<img alt="Create codespace" src="https://github.com/user-attachments/assets/cb29a8da-d1ac-42f5-962c-7d43b8011324" width="400px"/><br/>
+<div style="display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:12px">
+<div style="flex:1">
+<div style="font-weight:700;margin-bottom:6px">Or choose a profile:</div>
+<div class="profiles" id="profiles">
+<div class="profile"><strong>Aya, 3</strong><div>Gaza — needs meal</div><button class="btn profileSelect">Feed Aya</button></div>
+<div class="profile"><strong>Hassan, 6</strong><div>Somalia — needs food</div><button class="btn profileSelect">Feed Hassan</button></div>
+</div>
+</div>
+<div style="width:220px">
+<div style="font-weight:700;margin-bottom:6px">Or feed yourself</div>
+<button id="feedSelf" class="btn">Feed Myself</button>
+</div>
+</div>
+</div>
+</div>
 
-Give the codespace a minute or two to start up – it'll automatically build and preview your new website! 
-
-![this project in a codespace](https://github.com/user-attachments/assets/308941a8-ddbe-48f6-a8f0-c23cc615ed01)
-
-* When your website preview opens, click the **🔎 Split** button at the bottom so that you can see the site side by side with your code.
-* _You can close [x] the **Terminal** while you work._
-
-Make sure you [save your changes to GitHub](#save-your-edits-to-github).
-
-## Get to know your website
-
-You can make edits in the files by opening them from the left sidebar. Your website preview will update as you edit!
-
-💡 Try opening `index.html` and making a change.
-
-🎨 Change your site style rules in `style.css`.
-
-🖼️ Add images in the `public` folder – you'll find an example of including an image in the HTML.
-
-> 🚨⚠️ Danger zone: There are directories in the project that might break your site... 😱😈
->
-> * The `.devcontainer` folder includes the configuration that creates the experience in your codespace.
-> * The `helpers` folder contains some bash scripts that run when your project starts and when you hit the **🚀 Publish** button.
-
-### Share your draft site 
-
-You can share links to your draft site with collaborators – click **🔗 Share** at the bottom of the editor. The terminal output will include a link you can right-click and copy to share with anyone you like! 
-
-> This project includes a handy shortcut button for grabbing your preview URL but it might be a wee bit error prone 😅 you can also access these details in **💻 Terminal** > **PORTS** or by clicking the little Forwarded Ports icon: <img src="https://github.com/user-attachments/assets/6bfc0238-a0a8-434f-9188-ff1d45df0ca0" style="height:1em" alt="ports icon"/>
->
-> Change `private` to `public` by right-clicking your running port and choosing from the options.
->
-> Copy the URL to your clipboard and share it 📋.
-
-## Deploy your site to Fastly Compute
-
-Ready to unveil your site to the world? Deploy it to Fastly!
-
-Grab a Fastly API key from your account and add it to your GitHub repo:
-
-- Sign up for a <strong><a href="https://www.fastly.com/signup/" target="_blank">free Fastly developer account</a></strong>
-- Grab an **API Token** from **Account** > **API Tokens** > **Personal Tokens** > **Create Token**
-  - _Type_: Automation
-  - _Role_: Engineer
-  - _Scope_: Global (deselect the _Read-only access_ box)
-  - _Access_: All services
-  - _Expiration_: Never expire
-- **Copy the token value into GitHub**
-  - Back in your codespace, click into the textfield at the top of the editor and type `>` to access the command palette
-  - Type `secret` and select **Codespaces: Manage user secrets**
-    - <img alt="Secret command" src="https://github.com/user-attachments/assets/a6cfeac8-2aca-40a4-ab41-d207733b61cc" width="300px"/>
-  - Click **+ Add a new secret**
-    - <img alt="Add new secret" src="https://github.com/user-attachments/assets/350e545c-0073-4327-ac99-3663049e7aad" width="400px"/>
-  - Enter the name `FASTLY_API_TOKEN`
-    - <img alt="Fastly token" src="https://github.com/user-attachments/assets/536d1b2a-bf62-4085-aac4-ade7d2898583" width="400px"/>
-  - Paste your token value and enter
-
-In the notifications area at the bottom right of your codespace, you should see a prompt to **reload** for the new environment variable, so go ahead and click that (otherwise click the little bell 🔔 icon to check for the message).
-
-Hit the **🚀 Publish** button at the bottom of the editor, enter `y` and watch the **Terminal** output for your new site address! It might take a couple of minutes... 🥁
-
-![New Compute app address in the Terminal](https://github.com/user-attachments/assets/0a5a8f84-4907-4d60-83da-d3b90e745562)
-
-You'll see your new `*.edgecompute.app` address in the output. Open it in a new tab and tell everyone you know about your new site. 📣
-
-🎢 Whenever you update your content, hit the **🚀 Publish** button again to go live!
-
-## Save your edits to GitHub
-
-GitHub will keep the edits you make in the codespace only for a limited time, so it's a good idea to commit your work to a repo regularly. Use the **Source Control** button on the left of the editor – you can make commits, open and merge pull requests right inside the codespace. 
-
-<img alt="source control" src="https://github.com/user-attachments/assets/a5160b08-4f80-4a5f-af76-bde18a43427d" width="300px"/>
-
-> GitHub will notify you if any of your codespaces are about to expire. If you have changes you want to keep, you can use the **Export changes to a branch** option.
-> 
-> <img alt="export to branch" width="500px" src="https://github.com/user-attachments/assets/c7815347-3e5a-4e34-97f2-db58343acaa4"/>
-
-## How this project works 🧐
-
-This project uses the <a href="https://github.com/fastly/compute-js-static-publish" target="_blank">Fastly JavaScript Static Publisher</a> to turn your blog into a serverless app that runs at the network edge, near your users. 
-
-* The project uses [Vite](https://vite.dev/) to build your site for deployment, placing files in the `deploy/_site` folder.
-* The Static Publisher uses those files to scaffold a Compute app that compiles into Webassembly (Wasm) to run fast and securely on the Fastly network – you'll find the Compute code in `deploy/_app` after you deploy.
-* When you publish, the project deploys the app to Fastly, creating a service and uploading the Wasm to it.
-* It then then publishes your content to a KV Store – a key-value store that also runs on Fastly and that your app can talk to.
-
-_The app itself only needs deployed to Fastly once, when you click the **🚀 Publish** button after that, we just update the content in your KV Store and your Compute app will pull your assets from there._
-
-📝 Your Fastly service and KV Store will include your GitHub username and repo in their names, so you'll only be able to deploy one Compute app per repo unless you tweak the scripts.
-
-⚙️ The settings we use to create the guided experience in the codespace are in the `.devcontainer/` folder.
-
-🧰 You'll find the Fastly CLI commands we use under the hood in the `helpers/publish.sh` script.
-
-💻 If you check the right-hand side of the **Terminal** you'll find multiple processes – this is to run the vite and Fastly commands.
-
-### Extensions
-
-This project uses the following extensions from the dev community! 🙌
-
-* [VSCode Action Buttons Ext](https://marketplace.visualstudio.com/items?itemName=jkearins.action-buttons-ext)
-* [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-
-## Keep going! 🛸
-
-**Don't stop there, <a href="https://www.fastly.com/documentation/solutions/tutorials/deliver-your-site/#sending-domain-traffic-to-fastly" target="_blank">add a domain to your new site</a>.**
-
-You'll find your service in your Fastly account control panel – check out the **Observability** stats! 📊
-
-Check out more tips on using the <a href="https://github.com/fastly/compute-js-static-publish" target="_blank">Static Publisher</a> in its `README`. Note that if you change the Compute code, you'll need to run a separate deploy command to push your changes to Fastly as the **🚀 Publish** button only deploys once, after that it just updates your KV content.
-
-🛟 Get help on the <a href="https://community.fastly.com" target="_blank">community forum</a>.
-
-<img src="https://github.com/user-attachments/assets/17a8af4a-100f-416d-a1cf-f84174262138" width="100px"/>
+<script>
+const countries=["Afghanistan","Albania","Algeria","Albania","Palestine","Gaza Strip","Iraq","Yemen","Somalia","Sudan","USA","India","Mexico","Brazil"]; 
+const kindBtn=document.getElementById('kindBtn');
+const counterText=document.getElementById('counterText');
+const creditsEl=document.getElementById('credits');
+const redeemModal=document.getElementById('redeemModal');
+const openModal=document.getElementById('openModal');
+const closeModal=document.getElementById('closeModal');
+const countryListEl=document.getElementById('countryList');
+const searchInput=document.getElementById('search');
+const tabList=document.getElementById('tabList');
+const tabMap=document.getElementById('tabMap');
+const panelList=document.getElementById('panelList');
+const panelMap=document.getElementById('panelMap');
+const openWorldMap=document.getElementById('openWorldMap');
+const mapCountryInput=document.getElementById('mapCountry');
+const mapChoose=document.getElementById('mapChoose');
+const demoGive=document.getElementById('demoGive');
+const resetBtn=document.getElementById('reset');
+const feedSelf=document.getElementById('feedSelf');
+let state={acts:0,credits:0};
+function render(){counterText.textContent=`${state.acts} / 3 acts`;creditsEl.textContent=state.credits;}
+render();
+kindBtn.addEventListener('click',()=>{
+state.acts++;if(state.acts>=3){state.acts=0;state.credits++;setTimeout(openRedeemModal,300);}render();});
+openModal.addEventListener('click',openRedeemModal);
+closeModal.addEventListener('click',()=>{redeemModal.style.display='none';});
+function openRedeemModal(){
+if(state.credits<=0){alert('No credits yet. Tap more kindness acts.');return;}
+populateCountries();redeemModal.style.display='flex';
+}
+function populateCountries(filter=''){
+countryListEl.innerHTML='';countries.filter(c=>c.toLowerCase().includes(filter.toLowerCase())).forEach(c=>{
+let el=document.createElement('div');el.className='country';el.textContent=c;el.addEventListener('click',()=>redeemToCountry(c));countryListEl.appendChild(el);});}
+searchInput.addEventListener('input',()=>populateCountries(searchInput.value));
+tabList.addEventListener('click',()=>{panelList.style.display='block';panelMap.style.display='none';tabList.style.background='#fff';tabList.style.border='2px solid var(--primary)';tabList.style.color='var(--primary)';tabMap.style.background='#fafafa';tabMap.style.border='1px solid #eee';tabMap.style.color='#333';});
+tabMap.addEventListener('click',()=>{panelList.style.display='none';panelMap.style.display='block';tabMap.style.background='#fff';tabMap.style.border='2px solid var(--primary)';tabMap.style.color='var(--primary)';tabList.style.background='#fafafa';tabList.style.border='1px solid #eee';tabList.style.color='#333';});
+openWorldMap.addEventListener('click',()=>{window.open('https://mapchart.net/world.html','_blank');});
+mapChoose.addEventListener('click',()=>{const c=mapCountryInput.value.trim();if(!c){alert('Paste country name');return;}redeemToCountry(c);});
+demoGive.addEventListener('click',()=>{state.credits++;render();alert('Demo credit added. Open Redeem to redeem it.');});
+resetBtn.addEventListener('click',()=>{state.acts=0;state.credits=0;render();alert('Demo reset.');});
+feedSelf.addEventListener('click',()=>{if(state.credits<=0)return alert('No credits');if(!confirm('Redeem 1 credit to feed yourself?'))return;redeemCredit({type:'self',target:'self'});});
+document.addEventListener('click',(e)=>{if(e.target.classList.contains('profileSelect')){const p=e.target.closest('.profile').querySelector('strong').textContent;if(state.credits<=0)return alert('No credits');if(!confirm('Redeem 1 credit to feed '+p+'?'))return;redeemCredit({type:'person',target:p});}});
+function redeemToCountry(c){if(state.credits<=0)return alert('No credits');if(!confirm('Redeem 1 credit to feed people in '+c+'?'))return;redeemCredit({type:'country',target:c});}
+function redeemCredit(payload){state.credits--;render();redeemModal.style.display='none';alert('Food Credit redeemed: '+(payload.target||payload.type));}
+</script>
+</body>
+</html>
